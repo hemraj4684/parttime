@@ -4,7 +4,7 @@
         <div class="col-md-8 col-md-offset-2">
             <div class="panel panel-default">
 
-                <div class="panel-heading">Edit Permission</div>
+                <div class="panel-heading">Add Permission</div>
                 <div class="panel-body">
                     <?php if(session()->has('message')): ?>
                     <div class="alert alert-success" role="alert">
@@ -18,19 +18,16 @@
 
                     </div>
                     <?php endif; ?>
-                    <form class="form-horizontal" role="form" method="POST" action="<?php echo e(route('permission.update',$recId->permission_id)); ?>">
+                    <form class="form-horizontal" role="form" method="POST" action="<?php echo e(route('permission.store')); ?>">
                    
                         <?php echo e(csrf_field()); ?>
-
-
-                        <?php echo e(method_field('PATCH')); ?>
 
 
                         <div class="form-group<?php echo e($errors->has('name') ? ' has-error' : ''); ?>">
                             <label for="name" class="col-md-4 control-label">Permission Name</label>
 
                             <div class="col-md-6">
-                                <input id="name" type="text" class="form-control" name="name" value="<?php echo e(isset($recId->name) ? $recId->name : old('name')); ?>">
+                                <input id="name" type="text" class="form-control" name="name" value="<?php echo e(old('name')); ?>">
 
                                 <?php if($errors->has('name')): ?>
                                     <span class="help-block">
@@ -44,7 +41,7 @@
                             <label for="routeName" class="col-md-4 control-label">Route Name</label>
 
                             <div class="col-md-6">
-                                <input id="routeName" type="text" class="form-control" name="routeName" value="<?php echo e(isset($recId->routeName) ? $recId->routeName : old('routeName')); ?>">
+                                <input id="routeName" type="text" class="form-control" name="routeName" value="<?php echo e(old('routeName')); ?>">
 
                                 <?php if($errors->has('routeName')): ?>
                                     <span class="help-block">
@@ -53,19 +50,15 @@
                                 <?php endif; ?>
                             </div>
                         </div>                       
+
                         <div class="form-group<?php echo e($errors->has('module_id') ? ' has-error' : ''); ?>">
                             <label for="module_id" class="col-md-4 control-label">Module</label>
                             <div class="col-md-6">
                               <select name="module_id" class="form-control" required>
                                     <option value="">Select</option>
                                     <?php foreach(App\Models\Module::all() as $module): ?>
-                                    <?php if($module->module_id==$recId->module_id): ?>
-                                      <option value="<?php echo e($module->module_id); ?>" selected><?php echo e($module->name); ?></option>
-                                    <?php else: ?>
                                       <option value="<?php echo e($module->module_id); ?>"><?php echo e($module->name); ?></option>
-                                    <?php endif; ?>
-                                  <?php endforeach; ?>
-                                    
+                                    <?php endforeach; ?>
                               </select>
                                 <?php if($errors->has('module_id')): ?>
                                     <span class="help-block">
@@ -74,11 +67,11 @@
                                 <?php endif; ?>
                             </div>
                         </div>
-                        
+
                         <div class="form-group">
                             <div class="col-md-6 col-md-offset-4">
                                 <button type="submit" class="btn btn-primary">
-                                    <i class="fa fa-btn fa-user"></i> Edit
+                                    <i class="fa fa-btn fa-save"></i> Save
                                 </button>
                                 <a href="<?php echo e(route('permission.index')); ?>" class="btn btn-primary">View</a>
                             </div>

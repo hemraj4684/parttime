@@ -7,7 +7,7 @@
         <div class="col-md-12">
             <div class="panel panel-default">
 
-                <div class="panel-heading">Edit Permission</div>
+                <div class="panel-heading">Assign Permissions to Role</div>
                 <div class="panel-body">
                     @if(session()->has('success'))
                     <div class="alert alert-success" role="alert">
@@ -39,29 +39,42 @@
                                         <strong>{{ $errors->first('role_id') }}</strong>
                                     </span>
                                 @endif
+                                <div class="checkbox">
+                                      <label><input type="checkbox" id="adminCheckAll">Select All</label>
+                                    </div>
 
                             </div>
                         </div>
 
                         <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
                             <label for="name" class="col-md-2 control-label">Permissions</label>
-                            <div class="col-md-10" id="permission">
-                                <div class="row">
-                                @foreach($routeName as $route)
-                                    <div class="col-md-3">
-                                        <div class="checkbox">
-                                          <label><input type="checkbox" name="permission_id[]" value="{{$route->id}}">{{$route->name}}</label>
-                                        </div>    
-                                    </div>
-                            @endforeach
-                            </div>
-                            
-                            </div>
+                            <div class="col-md-10" id="permission"><!--Main permission box started  -->
+                                @foreach($routeName as $key => $module)
+                                <div class="panel panel-default">
+                                  <div class="panel-heading">{{$key}}</div>
+                                  <div class="panel-body">
+                                        <div class="row">
+                                          @foreach($module as $route)  
+                                          <div class="col-lg-3" style="margin-bottom: 1%">
+                                            <div class="input-group">
+                                              <span class="input-group-addon">
+                                                <input type="checkbox" name="permission_id[]" aria-label="..." value="{{$route['permission_id']}}" class="permissionChkBox">
+                                              </span>
+                                                <input type="text" class="form-control" aria-label="..." value="{{$route['perName']}}" readonly>
+                                            </div><!-- /input-group -->
+                                          </div><!-- /.col-lg-6 -->
+                                          @endforeach
+                                        </div><!-- /.row -->
+                                  </div>
+                                </div>
+                                @endforeach
+
+                            </div><!--Main permission box exnded  -->
                         </div>
                         <div class="form-group">
                             <div class="col-md-6 col-md-offset-4">
                                 <button type="submit" class="btn btn-primary">
-                                    <i class="fa fa-btn fa-user"></i> Edit
+                                    <i class="fa fa-btn fa-user"></i> Save
                                 </button>
                                 <a href="{{ route('permission.index') }}" class="btn btn-primary">View</a>
                             </div>
@@ -74,5 +87,29 @@
 </div>
 @endsection
 @section('script')
-<script src="{{ asset('js/permission.js') }}"></script>
+<script>
+$(document).on('change','#role_id',function(index,value){
+  var roleId = $(this).val();
+ 
+  var url = "{{url('role/permission/')}}";
+ alert(url); 
+    $.ajax({
+        method: 'get',
+        url: url+"/"+roleId,
+        dataType: 'html',
+        success: function(data) {
+
+            
+            //var value = eval(msg);
+                $("#permission").html(data);
+
+        }
+    });
+    //$('#confirm').attr('action',url);
+});
+
+$("#adminCheckAll").click(function(){
+    $(".permissionChkBox").prop('checked', $(this).prop("checked"));
+});
+</script>
 @endsection

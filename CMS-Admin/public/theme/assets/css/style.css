@@ -2539,10 +2539,10 @@ ul.states li {
     padding: 15px 15px;
     display: block;
 }
-.panel-heading {
+/*.panel-heading {
     padding: 0px 0px;
     border-bottom: 1px solid transparent;
-}
+}*/
 .panel-heading .panel-title i {
     color: #999999;
     font-size: 12px;

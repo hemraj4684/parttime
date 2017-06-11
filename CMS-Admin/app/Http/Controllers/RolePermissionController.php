@@ -5,17 +5,19 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Permission;
 use App\Models\RolePermission;
-use Schema,Session;
+use Schema,Session,Auth;
 
 class RolePermissionController extends Controller
 {
     public $rolePer = array();
-    private $permModel;
+    private $permModel, $org_id, $user_id;
     private $perm;
     
     public function __construct(){
         $this->permModel = new RolePermission();
-        $this->perm = new Permission();    
+        $this->perm = new Permission();
+        $this->org_id = Auth::user()->org_id;
+        $this->user_id = Auth::user()->id;
     }
 
     public function index()
@@ -29,7 +31,8 @@ class RolePermissionController extends Controller
     	//$routeName = $this->permModel->allrouteName();
 
         $routeName = $this->perm->allrouteName();
-        $permissionPerRole = $this->permModel->allPermissionPerRole($id);
+        $permissionPerRole = $this->permModel->allPermissionNamePerRole($id,$this->org_id);
+        //dd($permissionPerRole,$routeName);
         return view('permission.rolePermissionAjax', compact('routeName','permissionPerRole'));   
     }
 
@@ -37,7 +40,7 @@ class RolePermissionController extends Controller
         $dataIns = $dataDel = false;
     	$permissionPerRole = $permissionPerRoleInsert = $permissionPerRoleDelete = array();
 
-    	$permissionPerRole = $this->permModel->allPermissionPerRole($req->role_id);
+    	$permissionPerRole = $this->permModel->allPermissionPerRole($req->role_id,$this->org_id);
         
         $permissionPerRoleInsert = array_diff($req->permission_id,$permissionPerRole);
         $permissionPerRoleDelete = array_diff($permissionPerRole, $req->permission_id);
@@ -55,6 +58,8 @@ class RolePermissionController extends Controller
             foreach ($permissionPerRoleInsert as $perId) {
                 $this->rolePer[$i]['role_id'] = $req->role_id;
                 $this->rolePer[$i]['permission_id'] = $perId;
+                $this->rolePer[$i]['org_id'] = $this->org_id;
+                $this->rolePer[$i]['updated_by'] = $this->user_id;
                 $i++;
             }
 

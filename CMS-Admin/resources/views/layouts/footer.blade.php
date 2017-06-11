@@ -107,7 +107,12 @@ $(document).ready(function(){
        $("#open").hide();
 	   $("#create").show();
     });
-	
+
+  $(document).on('click', '.delete_po', function (index, value) {
+      var url = $(this).attr('data-url');
+      $('#confirm').attr('action', url);
+    }); 
+    	
 });
 
  

@@ -281,8 +281,7 @@ $movestatus = move_uploaded_file($_FILES['org_logo_image']['tmp_name'], $target_
    $services = Services::where('status', 1)
                ->take(10)
                ->get();
-	
-	$orgservices = DB::table('org_services')
+		$orgservices = DB::table('org_services')
 ->join('services as s', 'org_services.service_id', '=', 's.service_id')
 ->select('s.*','org_services.*')
 ->where('org_services.org_id','=',$id)

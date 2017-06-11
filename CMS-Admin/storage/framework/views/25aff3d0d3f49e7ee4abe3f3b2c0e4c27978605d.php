@@ -1,13 +1,36 @@
- <?php $__env->startSection('title'); ?> Show Role <?php $__env->stopSection(); ?>
+ <?php $__env->startSection('title'); ?> Tabs <?php $__env->stopSection(); ?>
 <?php $__env->startSection('content'); ?>
 
 <div class="container wrapper main-wrapper">
     <div class="row">
+      <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title">
+              <div class="page-title">
+                <div class="pull-left">
+                <!-- PAGE HEADING TAG - START -->
+           <h1 class="title">Tabs</h1>
+                
+                <!-- PAGE HEADING TAG - END -->
+                </div>
+                <div class="pull-right hidden-xs">
+                   <ol class="breadcrumb">
+                    <li> <a href="<?php echo e(url('/')); ?>"><i class="fa fa-home"></i>Home</a> </li>
+                    <li> <a href="<?php echo e(route('tab.index')); ?>">Tab</a> </li>
+                   </ol>
+               </div>
+              </div>
+
+            </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
         <div class="col-md-8 col-md-offset-2">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                        All Permissions
-                         <a href="<?php echo e(route('permission.create')); ?>" class="btn btn-primary pull-right">Sync</a>    
+                       
+                         <a href="<?php echo e(route('tab.create')); ?>" class="btn btn-primary pull-right">Create Tab</a>    
                      <div class="clearfix"></div>
                 </div>
                 <div class="panel-body">
@@ -27,24 +50,25 @@
                         <table class="table table-responsive table-striped table-bordered table-hover no-margin">
                           <thead>
                             <tr>
-                             <th>Serial No.</th>     
-                             <th>Permission Display Name</th>
-                             <th>Permission Route Name</th>
-                             <th>Module Name</th>
+                             <th>Id</th>
+                             <th>Tab Name</th>
+                             <th>Description</th>
+                             <th>Service Name</th>
                              <th colspan="2" style="width:10%; text-align: center">Action</th>
                            </tr>
                          </thead>
                          <tbody>
-                         <?php $i = (($permissions->currentPage()-1)*PAGINATENO)+1; ?>
-                         <?php foreach($permissions as $perm): ?>
+                         <?php $i = (($tabs->currentPage()-1)*PAGINATENO)+1; ?>
+                         <?php if($tabs): ?>
+                         <?php foreach($tabs as $tab): ?>
                            <tr>
                              <td><?php echo e($i++); ?></td>     
-                             <td><?php echo e($perm->permissionName); ?></td>
-                             <td><?php echo e($perm->routeName); ?></td>
-                             <td><?php echo e($perm->moduleName); ?></td>
-                             <td><a href="<?php echo e(route('permission.edit',$perm->permission_id)); ?>" class="btn btn-xs btn-danger"><i class="fa fa-edit"></i></a></td>
+                             <td><?php echo e($tab->name); ?></td>
+                             <td><?php echo e($tab->description); ?></td>
+                             <td><?php echo e($tab->service_name); ?></td>
+                             <td><a href="<?php echo e(route('tab.edit',$tab->tab_id)); ?>" class="btn btn-xs btn-danger"><i class="fa fa-edit"></i></a></td>
                              <td>
-                                <button class="btn btn-xs btn-danger delete_po" type="button" data-toggle="modal" data-target="#confirmDelete" data-title="Delete" data-url="<?php echo e(route('permission.destroy',$perm->permission_id)); ?>">
+                                <button class="btn btn-xs btn-danger delete_po" type="button" data-toggle="modal" data-target="#confirmDelete" data-title="Delete" data-url="<?php echo e(route('tab.destroy',$tab->tab_id)); ?>">
                                 <i class="fa fa fa-trash-o" ></i>
                                 </button>
                              </td>
@@ -53,7 +77,9 @@
                          </tbody>
                       </table>
                    </div>
-                    <?php echo \App\Models\Permission::paginate(20)->render(); ?>   
+                    <?php echo $tabs->render(); ?>
+
+                  <?php endif; ?>   
                 </div>
             </div>
         </div>
@@ -90,5 +116,5 @@
   </form>
 <!-- modal end -->
 
-           
+
 <?php echo $__env->make('layouts.app', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

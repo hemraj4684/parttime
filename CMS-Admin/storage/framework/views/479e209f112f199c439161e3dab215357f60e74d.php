@@ -40,7 +40,7 @@
    <?php echo $__env->make('layouts.footer', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?> 
    <!-- Footer Endds --> 
 </body>
-
+<?php echo $__env->yieldContent('script'); ?>
 </html>
 
 

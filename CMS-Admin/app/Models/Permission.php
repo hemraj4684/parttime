@@ -3,37 +3,66 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Validator,Schema;
+use Validator,Schema,Auth;
+use App\Library\CrudLibrary;
 
 class Permission extends Model
 {
     protected $fillable = [
-        'name', 'routeName'
+        'name', 'routeName', 'module_id'
     ];
 
     public $columns = [];
 
-    protected $table = 'permission';
+    protected $table = 'permissions';
+
+    protected $primaryKey = 'permission_id';
 
     protected $rules = [
     	'routeName'  => 'required|min:2|max:255',
     ];
+    private $crudLibrary;
+
+    public function __construct()
+    {
+         $this->crudLibrary = new CrudLibrary($this,$this->table);
+         //$permission = new Permission();
+    }
 
     public function allrouteName(){
     	$routeNameData = $routeName = [];
 
-    	$routeName = $this->get(['id','name']);
-    	// foreach ($routeName as $value) {
-    	// 	$routeNameData[] = $value->name;
-    	// }
-    	return $routeName;
+
+        $org_id = Auth::user()->org_id;
+        
+        $routeName = $this->join('modules','modules.module_id','=','permissions.module_id')
+                        ->join('tabs','tabs.tab_id','=','modules.tab_id')
+                        ->join('services','services.service_id','=','tabs.service_id')
+                        ->join('org_services','org_services.service_id', '=', 'services.service_id')
+                        ->where('org_services.org_id',$org_id)
+                        ->where('org_services.status',1)
+                        ->get(['services.service_name as serviceName','tabs.name as tabName','modules.name as modName','permissions.permission_id','permissions.name as perName','permissions.routeName'])
+                        ->toArray();
+
+        $groupByModuleRoutes = array();
+
+            foreach ( $routeName as $value ) {
+                $groupByModuleRoutes[$value['modName']][] = $value;
+            }
+
+        
+    	return $groupByModuleRoutes;
     }
 
-    public function validatePermission(array $data)
+    public function validatePermission(array $data,$id=null)
     {
-    	
-    	return  Validator::make($data, $this->rules);
-    	
+    	if($id){
+            $this->rules = [
+                'name'  => "required|min:2|max:255|unique:permissions,name,$id,permission_id"
+            ];
+        }
+        return  $this->crudLibrary->validateOperation($data,$this->rules);
+        //Validator::make($data, $this->rules);
     }
 
 
@@ -41,36 +70,18 @@ class Permission extends Model
     {
     	//get all columns of current model
 
-    	$columns = Schema::getColumnListing($this->table);
-
-/****** automate save process getting all column names and text box name and save textbox value in columns ******/
-    	
-    	foreach ($data as $key => $value) {
-    		if(in_array($key, $columns)){
-    			$this->$key = $value;
-    		}
-    	}
-        #TODO ADD PROPER USER ID
-        $this->created_by = 1;
-    	return $this->save();
+    	$obj = $this->crudLibrary->saveOperation($data);
+        
+        $obj->created_by = Auth::user()->id;
+    	return $obj->save();
     }
 
     public function updatePermission(array $data, $id)
     {
-    	//get all columns of current model
-
-    	$columns = Schema::getColumnListing($this->table);
-
-/****** automate save process getting all column names and text box name and save textbox value in columns ******/
-    	$obj = $this->find($id);
-    	//dd($obj,$data,$columns);
-    	foreach ($data as $key => $value) {
-    		if(in_array($key, $columns)){
-    			$obj->$key = $value;
-    		}
-    	}
-        #TODO ADD PROPER USER ID
-        $obj->updated_by = 1;
+    	
+        $obj = $this->crudLibrary->updateOperation($data, $id);
+    	
+        $obj->updated_by = Auth::user()->id;
     	return $obj->save();
     }
 

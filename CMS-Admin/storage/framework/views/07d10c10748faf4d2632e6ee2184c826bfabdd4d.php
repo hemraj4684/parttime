@@ -5,7 +5,7 @@
         <div class="col-md-12">
             <div class="panel panel-default">
 
-                <div class="panel-heading">Edit Permission</div>
+                <div class="panel-heading">Assign Permissions to Role</div>
                 <div class="panel-body">
                     <?php if(session()->has('success')): ?>
                     <div class="alert alert-success" role="alert">
@@ -40,29 +40,42 @@
                                         <strong><?php echo e($errors->first('role_id')); ?></strong>
                                     </span>
                                 <?php endif; ?>
+                                <div class="checkbox">
+                                      <label><input type="checkbox" id="adminCheckAll">Select All</label>
+                                    </div>
 
                             </div>
                         </div>
 
                         <div class="form-group<?php echo e($errors->has('name') ? ' has-error' : ''); ?>">
                             <label for="name" class="col-md-2 control-label">Permissions</label>
-                            <div class="col-md-10" id="permission">
-                                <div class="row">
-                                <?php foreach($routeName as $route): ?>
-                                    <div class="col-md-3">
-                                        <div class="checkbox">
-                                          <label><input type="checkbox" name="permission_id[]" value="<?php echo e($route->id); ?>"><?php echo e($route->name); ?></label>
-                                        </div>    
-                                    </div>
-                            <?php endforeach; ?>
-                            </div>
-                            
-                            </div>
+                            <div class="col-md-10" id="permission"><!--Main permission box started  -->
+                                <?php foreach($routeName as $key => $module): ?>
+                                <div class="panel panel-default">
+                                  <div class="panel-heading"><?php echo e($key); ?></div>
+                                  <div class="panel-body">
+                                        <div class="row">
+                                          <?php foreach($module as $route): ?>  
+                                          <div class="col-lg-3" style="margin-bottom: 1%">
+                                            <div class="input-group">
+                                              <span class="input-group-addon">
+                                                <input type="checkbox" name="permission_id[]" aria-label="..." value="<?php echo e($route['permission_id']); ?>" class="permissionChkBox">
+                                              </span>
+                                                <input type="text" class="form-control" aria-label="..." value="<?php echo e($route['perName']); ?>" readonly>
+                                            </div><!-- /input-group -->
+                                          </div><!-- /.col-lg-6 -->
+                                          <?php endforeach; ?>
+                                        </div><!-- /.row -->
+                                  </div>
+                                </div>
+                                <?php endforeach; ?>
+
+                            </div><!--Main permission box exnded  -->
                         </div>
                         <div class="form-group">
                             <div class="col-md-6 col-md-offset-4">
                                 <button type="submit" class="btn btn-primary">
-                                    <i class="fa fa-btn fa-user"></i> Edit
+                                    <i class="fa fa-btn fa-user"></i> Save
                                 </button>
                                 <a href="<?php echo e(route('permission.index')); ?>" class="btn btn-primary">View</a>
                             </div>
@@ -75,7 +88,31 @@
 </div>
 <?php $__env->stopSection(); ?>
 <?php $__env->startSection('script'); ?>
-<script src="<?php echo e(asset('js/permission.js')); ?>"></script>
+<script>
+$(document).on('change','#role_id',function(index,value){
+  var roleId = $(this).val();
+ 
+  var url = "<?php echo e(url('role/permission/')); ?>";
+ alert(url); 
+    $.ajax({
+        method: 'get',
+        url: url+"/"+roleId,
+        dataType: 'html',
+        success: function(data) {
+
+            
+            //var value = eval(msg);
+                $("#permission").html(data);
+
+        }
+    });
+    //$('#confirm').attr('action',url);
+});
+
+$("#adminCheckAll").click(function(){
+    $(".permissionChkBox").prop('checked', $(this).prop("checked"));
+});
+</script>
 <?php $__env->stopSection(); ?>
 
 <?php echo $__env->make('layouts.app', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

@@ -40,7 +40,7 @@
    @include('layouts.footer') 
    <!-- Footer Endds --> 
 </body>
-
+@yield('script')
 </html>
 
 

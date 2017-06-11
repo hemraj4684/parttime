@@ -11,10 +11,31 @@
 |
 */
 
+// created by Hemraj Started here
+Route::get('/userNotFound', function() {
+    return View('errors.503');
+})->name('503');
 Route::get('/role/view', 'RolePermissionController@index')->name('role.permission.view');
 Route::get('/role/permission/{id}', 'RolePermissionController@getPermissionsAsPerRole')->name('role.permission.checkbox');
 Route::post('/role/save', 'RolePermissionController@store')->name('role.permission.save');
 Route::resource('permission', 'PermissionController');
+Route::resource('tab', 'TabsController');
+Route::resource('module', 'ModuleController');
+
+Route::group(['middleware' => ['checkrole']], function (){
+	Route::get('/dummyurl', function() {
+    	return "CMS-ADMIN";
+	})->name('dummy.url');
+
+	Route::get('/dummyurl/second', function() {
+    	return "CMS-ADMIN SECOND";
+	})->name('dummy.url.second');
+});
+//created by hemraj ended here
+
+
+
+
 
 Route::get('/', function () {
 	//redirect user

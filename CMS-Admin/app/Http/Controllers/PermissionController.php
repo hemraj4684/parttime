@@ -14,8 +14,9 @@ class PermissionController extends Controller
 {
     public $per = array();
     private $permModel;
-    
-    public function __construct(){
+
+    public function __construct()
+    {
         $this->permModel = new Permission();    
     }
     
@@ -45,20 +46,45 @@ class PermissionController extends Controller
     	return view('permission.permissionView');
     }
 
-    public function viewPermission() {
+    public function viewPermission() 
+    {
         return view('permission.permissionView');
     }
 
     public function index()
     {
-        return view('permission.permissionView');
+        $permissions = Permission::leftjoin('modules','permissions.module_id','=','modules.module_id')
+                                    ->select('permissions.permission_id','permissions.name as permissionName','permissions.routeName','modules.name as moduleName')
+                                    ->paginate(PAGINATENO);
+        return view('permission.permissionView',compact('permissions'));
     }
 
-    public function show(){
-
+    public function create()
+    {
+        return view('permission.permissionCreate');
     }
 
+    public function store(Request $req)
+    {
+        $res = $this->permModel->validatePermission($req->all());
+        //  dd($res->fails());
+        if ($res->fails()) {
+          return redirect()->route('permission.create')
+                          ->withErrors($res)
+                          ->withInput();
+        } else {
 
+          $saveYN = $this->permModel->savePermission($req->all());
+          if ($saveYN) {
+            Session::flash('message', 'Record Saved Successfully');
+            return redirect()->route('permission.create');
+          } else {
+
+            Session::flash('error', 'Record not Saved Successfully');
+            return redirect()->route('permission.create');
+          }
+        }
+    }
 
 /**
   * sync all named routes and stored in permissions table.
@@ -69,7 +95,7 @@ class PermissionController extends Controller
   */
 
 
-    public function create()
+    public function sync()
     {
         $i = 0;
         foreach (Route::getRoutes() as $value) {
@@ -116,16 +142,14 @@ class PermissionController extends Controller
     
     public function update(Request $req, $id)
     {
+        $res = $this->permModel->validatePermission($req->all(),$id);
         
-        
-        $res = $this->permModel->validatePermission($req->all());
-
         if ($res->fails()) {
             return redirect()->route('permission.edit',$id)
                         ->withErrors($res)
                         ->withInput();
         }
-        else{
+        else {
 
             $saveYN = $this->permModel->updatePermission($req->all(), $id);
             if($saveYN){

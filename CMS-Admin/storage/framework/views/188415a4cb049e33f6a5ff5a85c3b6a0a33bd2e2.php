@@ -1,20 +1,20 @@
                
- @foreach($routeName as $key => $module)
+ <?php foreach($routeName as $key => $module): ?>
                                 <div class="panel panel-default">
-                                  <div class="panel-heading">{{$key}}</div>
+                                  <div class="panel-heading"><?php echo e($key); ?></div>
                                   <div class="panel-body">
                                         <div class="row">
-                                          @foreach($module as $route)  
+                                          <?php foreach($module as $route): ?>  
                                           <div class="col-lg-3" style="margin-bottom: 1%">
                                             <div class="input-group">
                                               <span class="input-group-addon">
-                                                <input type="checkbox" name="permission_id[]" value="{{$route['permission_id']}}" class="permissionChkBox" @if(in_array($route['routeName'], $permissionPerRole)) checked @endif>
+                                                <input type="checkbox" name="permission_id[]" value="<?php echo e($route['permission_id']); ?>" class="permissionChkBox" <?php if(in_array($route['routeName'], $permissionPerRole)): ?> checked <?php endif; ?>>
                                               </span>
-                                                <input type="text" class="form-control" aria-label="..." value="{{$route['perName']}}" readonly>
+                                                <input type="text" class="form-control" aria-label="..." value="<?php echo e($route['perName']); ?>" readonly>
                                             </div><!-- /input-group -->
                                           </div><!-- /.col-lg-6 -->
-                                          @endforeach
+                                          <?php endforeach; ?>
                                         </div><!-- /.row -->
                                   </div>
                                 </div>
-                                @endforeach
+                                <?php endforeach; ?>

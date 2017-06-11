@@ -1,14 +1,37 @@
 @extends('layouts.app')
- @section('title') Show Role @stop
+ @section('title') Modules @stop
 @section('content')
 
 <div class="container wrapper main-wrapper">
     <div class="row">
+      <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+            <div class="x_title">
+              <div class="page-title">
+                <div class="pull-left">
+                <!-- PAGE HEADING TAG - START -->
+           <h1 class="title">Modules</h1>
+                
+                <!-- PAGE HEADING TAG - END -->
+                </div>
+                <div class="pull-right hidden-xs">
+                   <ol class="breadcrumb">
+                    <li> <a href="{{ url('/') }}"><i class="fa fa-home"></i>Home</a> </li>
+                    <li> <a href="{{ route('module.index') }}">Modules</a> </li>
+                   </ol>
+               </div>
+              </div>
+
+            </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
         <div class="col-md-8 col-md-offset-2">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                        All Permissions
-                         <a href="{{ route('permission.create') }}" class="btn btn-primary pull-right">Sync</a>    
+                       
+                         <a href="{{ route('module.create') }}" class="btn btn-primary pull-right">Create Module</a>    
                      <div class="clearfix"></div>
                 </div>
                 <div class="panel-body">
@@ -26,24 +49,25 @@
                         <table class="table table-responsive table-striped table-bordered table-hover no-margin">
                           <thead>
                             <tr>
-                             <th>Serial No.</th>     
-                             <th>Permission Display Name</th>
-                             <th>Permission Route Name</th>
+                             <th>#</th>
                              <th>Module Name</th>
+                             <th>Description</th>
+                             <th>Tab Name</th>
                              <th colspan="2" style="width:10%; text-align: center">Action</th>
                            </tr>
                          </thead>
                          <tbody>
-                         <?php $i = (($permissions->currentPage()-1)*PAGINATENO)+1; ?>
-                         @foreach($permissions as $perm)
+                         <?php $i = (($modules->currentPage()-1)*PAGINATENO)+1; ?>
+                         @if($modules)
+                         @foreach($modules as $module)
                            <tr>
                              <td>{{$i++}}</td>     
-                             <td>{{$perm->permissionName}}</td>
-                             <td>{{$perm->routeName}}</td>
-                             <td>{{$perm->moduleName}}</td>
-                             <td><a href="{{route('permission.edit',$perm->permission_id)}}" class="btn btn-xs btn-danger"><i class="fa fa-edit"></i></a></td>
+                             <td>{{$module->moduleName}}</td>
+                             <td>{{$module->description}}</td>
+                             <td>{{$module->tabName}}</td>
+                             <td><a href="{{route('module.edit',$module->module_id)}}" class="btn btn-xs btn-danger"><i class="fa fa-edit"></i></a></td>
                              <td>
-                                <button class="btn btn-xs btn-danger delete_po" type="button" data-toggle="modal" data-target="#confirmDelete" data-title="Delete" data-url="{{route('permission.destroy',$perm->permission_id)}}">
+                                <button class="btn btn-xs btn-danger delete_po" type="button" data-toggle="modal" data-target="#confirmDelete" data-title="Delete" data-url="{{route('module.destroy',$module->module_id)}}">
                                 <i class="fa fa fa-trash-o" ></i>
                                 </button>
                              </td>
@@ -52,7 +76,8 @@
                          </tbody>
                       </table>
                    </div>
-                    {!! \App\Models\Permission::paginate(20)->render() !!}   
+                    {!! $modules->render() !!}
+                  @endif   
                 </div>
             </div>
         </div>
@@ -87,4 +112,3 @@
   </form>
 <!-- modal end -->
 
-           
