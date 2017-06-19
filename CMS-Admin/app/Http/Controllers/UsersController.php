@@ -37,16 +37,16 @@ class UsersController extends Controller
 			}
 			
   		          $url = env('API_URL')."users/$id";
-			 $result = $this->httpGet($url);
-			 $results = json_decode($result,false);
-						$users = $results->users;
-$profuser = DB::table('org_support_details')
-->join('organizations as org', 'org_support_details.org_id', '=', 'org.org_id')
-->select('org_support_details.*','org.org_name')
- ->get();
-$orgtype = \DB::table('organizations')->lists('org_name','org_id');
-	$roles = \DB::table('roles')->lists('role_name','role_id');						
-			return view('users.list')->with('users',$users)->with('orgtype', $orgtype)->with('roles',$roles);	
+				  $result = $this->httpGet($url);
+				  $results = json_decode($result,false);
+									$users = $results->users;
+			$profuser = DB::table('org_support_details')
+									->join('organizations as org', 'org_support_details.org_id', '=', 'org.org_id')
+									->select('org_support_details.*','org.org_name')
+									 ->get();
+			$orgtype = \DB::table('organizations')->lists('org_name','org_id');
+				$roles = \DB::table('roles')->lists('role_name','role_id');						
+						return view('users.list')->with('users',$users)->with('orgtype', $orgtype)->with('roles',$roles);	
 					
 			
 

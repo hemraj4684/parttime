@@ -11,27 +11,33 @@
 |
 */
 
+
 // created by Hemraj Started here
 Route::get('/userNotFound', function() {
     return View('errors.503');
 })->name('503');
+
 Route::get('/role/view', 'RolePermissionController@index')->name('role.permission.view');
 Route::get('/role/permission/{id}', 'RolePermissionController@getPermissionsAsPerRole')->name('role.permission.checkbox');
 Route::post('/role/save', 'RolePermissionController@store')->name('role.permission.save');
 Route::resource('permission', 'PermissionController');
+Route::get('/sunc', ['as'=>'permission.sync','uses' => 'PermissionController@sync']);
 Route::resource('tab', 'TabsController');
 Route::resource('module', 'ModuleController');
 
 Route::group(['middleware' => ['checkrole']], function (){
-	Route::get('/dummyurl', function() {
-    	return "CMS-ADMIN";
-	})->name('dummy.url');
+    Route::get('/dummyurl', function() {
+        return "CMS-ADMIN";
+    })->name('dummy.url');
+    
+    Route::get('users/create', [ 'as'=>'users.create','uses' => 'UsersController@create']);
 
-	Route::get('/dummyurl/second', function() {
-    	return "CMS-ADMIN SECOND";
-	})->name('dummy.url.second');
+    Route::get('/dummyurl/second', function() {
+        return "CMS-ADMIN SECOND";
+    })->name('dummy.url.second');
 });
 //created by hemraj ended here
+
 
 
 
@@ -52,12 +58,27 @@ Route::get('register/verify/{confirmationCode}', [
     'as' => 'confirmation_path',
     'uses' => 'RegisterController@confirm'
 ]);
-/* Forgot password (GET) */
+/* Forgot password (GET) 
+
+
+Route::group(['before' => 'auth.jwt'], function () {
+    //	Route::post('get_user_details', 'APIController@get_user_details');
+    Route::get('me', function() {
+  $user = JWTAuth::parseToken()->toUser();
+        dd($user);
+         $token = JWTAuth::getToken();
+}); //Theoretically;
+    });
+    
+*/
 
 Route::group(['middlewareGroups' => ['web']], function () {
 
+Route::auth();
 
-Route::get('logout', 'AuthController@getLogout');
+    Route::get('/logout', ['as' => 'logout', 'uses' => 'Auth\AuthController@getLogout']);
+
+ 
 Route::get('org/map', ['as' => 'org.map', 'uses' => 'OrganizationController@map']);
 Route::post('org/mapses/', ['as' => 'org.mapses', 'uses' => 'OrganizationController@mapses']);
 Route::get('org', ['as' => 'org.list', 'uses' => 'OrganizationController@index']);
@@ -76,7 +97,7 @@ Route::post('org/decide', [ 'as'=>'org.decide','uses' => 'OrganizationController
 
 Route::get('org/review', ['as' => 'org.review', 'uses' => 'OrganizationController@review']);
 Route::get('accounts/forgot', [ 'as'=>'accounts.forgot','uses' => 'AccountController@getForgotPassword']);
-Route::auth();
+
 Route::get('/home', 'HomeController@web');
 Route::get('home/web', [ 'as'=>'home.web','uses' => 'HomeController@web']);
 Route::get('home/help', [ 'as'=>'home.help','uses' => 'HomeController@help']);
@@ -87,26 +108,26 @@ Route::get('password/forgot', ['as' => 'password.forgot', 'uses' => 'Auth\Passwo
 Route::post('password/forgotreset', ['as' => 'password.forgotreset', 'uses' => 'Auth\PasswordController@forgotreset']);
 
 
-//Route::resource('/users','UsersController');
-//Route::resource('/roles','RoleController');
-//Route::resource('/clients','ClientController');
-//Route::resource('/messages','MessageController');
-// Route::resource('/triggers', 'TriggerController');
-// Route::resource('/weather', 'WeatherController');
-// Route::resource('/contacts', 'ContactController');
-// Route::resource('/locations', 'LocationsController');
-// Route::resource('/session', 'SessionController');
+Route::resource('/users','UsersController');
+Route::resource('/roles','RoleController');
+Route::resource('/clients','ClientController');
+Route::resource('/messages','MessageController');
+Route::resource('/triggers', 'TriggerController');
+Route::resource('/weather', 'WeatherController');
+Route::resource('/contacts', 'ContactController');
+Route::resource('/locations', 'LocationsController');
+Route::resource('/session', 'SessionController');
 
 
 
 
-Route::get('users', ['as' => 'users.list', 'uses' => 'UsersController@index']);
-Route::get('users/create', [ 'as'=>'users.create','uses' => 'UsersController@create']);
-Route::post('users', ['as' => 'users.store', 'uses' => 'UsersController@store']);
-Route::get('users/{id}/show', ['as' => 'users.show', 'uses' => 'UsersController@show']);
-Route::get('users/{id}/edit',['as'=>'users.edit', 'uses' => 'UsersController@edit']);
-Route::put('users/{id}',['as' => 'users.update', 'uses' => 'UsersController@update']);
-Route::get('users/{id}/delete', ['as' => 'users.destroy', 'uses' => 'UsersController@destroy']);
+// Route::get('users', ['as' => 'users.list', 'uses' => 'UsersController@index']);
+// Route::get('users/create', [ 'as'=>'users.create','uses' => 'UsersController@create']);
+// Route::post('users', ['as' => 'users.store', 'uses' => 'UsersController@store']);
+// Route::get('users/{id}/show', ['as' => 'users.show', 'uses' => 'UsersController@show']);
+// Route::get('users/{id}/edit',['as'=>'users.edit', 'uses' => 'UsersController@edit']);
+// Route::put('users/{id}',['as' => 'users.update', 'uses' => 'UsersController@update']);
+// Route::get('users/{id}/delete', ['as' => 'users.destroy', 'uses' => 'UsersController@destroy']);
 Route::get('users/{id}/settings',['as'=>'users.settings', 'uses' => 'UsersController@settings']);
 Route::post('users/setupdate',['as' => 'users.setupdate', 'uses' => 'UsersController@updatePassword']);
 Route::post('users/searchres', [ 'as'=>'users.searchres','uses' => 'UsersController@searchres']);
@@ -125,7 +146,7 @@ Route::get('privileges/{id}/delete', ['as' => 'privileges.destroy', 'uses' => 'P
 Route::post('privileges/searchres', [ 'as'=>'privileges.searchres','uses' => 'PrivilegeController@searchres']);
 
 Route::get('permissions', ['as' => 'permissions.list', 'uses' => 'PermissionsController@index']);
-Route::get('permissions/create', [ 'as'=>'permissions.create','uses' => 'PermissionsController@create']);
+Route::get('permissions/create', [ 'as'=>'permissions.create','uses' => 'PermissionController@index']);
 Route::post('permissions', ['as' => 'permissions.store', 'uses' => 'PermissionsController@store']);
 Route::get('permissions/{id}/show', ['as' => 'permissions.show', 'uses' => 'PermissionsController@show']);
 Route::get('permissions/{id}/edit',['as'=>'permissions.edit', 'uses' => 'PermissionsController@edit']);
@@ -216,13 +237,13 @@ Route::get('contracts/{id}/delete', ['as' => 'contracts.destroy', 'uses' => 'Con
 Route::post('contracts/searchres', [ 'as'=>'contracts.searchres','uses' => 'ContractsController@searchres']);
 
 
-Route::get('roles', ['as' => 'roles.list', 'uses' => 'RoleController@index']);
-Route::get('roles/create', [ 'as'=>'roles.create','uses' => 'RoleController@create']);
-Route::post('roles', ['as' => 'roles.store', 'uses' => 'RoleController@store']);
-Route::get('roles/{id}/show', ['as' => 'roles.show', 'uses' => 'RoleController@show']);
-Route::get('roles/{id}/edit',['as'=>'roles.edit', 'uses' => 'RoleController@edit']);
-Route::put('roles/{id}',['as' => 'roles.update', 'uses' => 'RoleController@update']);
-Route::get('roles/{id}/delete', ['as' => 'roles.destroy', 'uses' => 'RoleController@destroy']);
+// Route::get('roles', ['as' => 'roles.list', 'uses' => 'RoleController@index']);
+// Route::get('roles/create', [ 'as'=>'roles.create','uses' => 'RoleController@create']);
+// Route::post('roles', ['as' => 'roles.store', 'uses' => 'RoleController@store']);
+// Route::get('roles/{id}/show', ['as' => 'roles.show', 'uses' => 'RoleController@show']);
+// Route::get('roles/{id}/edit',['as'=>'roles.edit', 'uses' => 'RoleController@edit']);
+// Route::put('roles/{id}',['as' => 'roles.update', 'uses' => 'RoleController@update']);
+// Route::get('roles/{id}/delete', ['as' => 'roles.destroy', 'uses' => 'RoleController@destroy']);
 Route::post('roles/searchres', [ 'as'=>'roles.searchres','uses' => 'RoleController@searchres']);
 
 

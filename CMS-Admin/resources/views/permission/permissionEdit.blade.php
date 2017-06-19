@@ -78,7 +78,7 @@
                                 <button type="submit" class="btn btn-primary">
                                     <i class="fa fa-btn fa-user"></i> Edit
                                 </button>
-                                <a href="{{ route('permission.index') }}" class="btn btn-primary">View</a>
+                                <a href="{{ route('permissions.create') }}" class="btn btn-primary">View</a>
                             </div>
                         </div>
                     </form>

@@ -37,6 +37,15 @@ class RolePermissionController extends Controller
     }
 
     public function store(Request $req){
+        //dd($req->permission_id);
+        $temp = array();
+        foreach ($req->permission_id as $key => $value) {
+            $tempArray=explode(',', $value);
+            print_r($tempArray);
+            $temp = array_merge($tempArray,$temp);
+            
+        }
+        dd($temp);
         $dataIns = $dataDel = false;
     	$permissionPerRole = $permissionPerRoleInsert = $permissionPerRoleDelete = array();
 

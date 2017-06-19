@@ -5,6 +5,8 @@ use Illuminate\Http\Request;
 use App\Models\Role;
 use App\Models\Privileges;
 use App\Models\Permissions;
+use App\Models\Permission;
+use App\Models\RolePermission;
 use App\Models\Privilegeroles;
 use App\Models\Permissionroles;
 use Hash,DB;
@@ -21,10 +23,15 @@ class RoleController extends Controller
      *
      * @return void
      */
-    public function __construct()
-    {
-      //  $this->middleware('auth');
-		
+    public $rolePer = array();
+    private $permModel, $org_id, $user_id;
+    private $perm;
+    
+    public function __construct(){
+        $this->permModel = new RolePermission();
+        $this->perm = new Permission();
+        $this->org_id = Auth::user()->org_id;
+        $this->user_id = Auth::user()->id;
     }
    
     /**
@@ -38,14 +45,14 @@ class RoleController extends Controller
 		$privileges = Privileges ::all();
 		$permissions = Permissions ::all();
 		
-			  $url = env('API_URL')."roles";
-			 $result = $this->httpGet($url);
-			 //echo '<pre>';		print_r($result);exit;
-			 $results = json_decode($result,false);
-			 $list = $results->data;
-			 	
+		$url = env('API_URL')."roles";
+		$result = $this->httpGet($url);
+		 //echo '<pre>';		print_r($result);exit;
+		$results = json_decode($result,false);
+		$list = $results->data;
+		
 					 
-        return view('roles.list')->with('privileges',$privileges)->with('permissions',$permissions)->with('rolelist',$list);	
+        return view('roles.list',compact('routeName'))->with('privileges',$privileges)->with('permissions',$permissions)->with('rolelist',$list);	
 
 		}catch(Exception $e){
 			echo $e->getMessage();
@@ -69,9 +76,9 @@ class RoleController extends Controller
 			 //echo '<pre>';		print_r($result);exit;
 			 $results = json_decode($result,false);
 			 $list = $results->data;
-			 	
+			 $routeName = $this->perm->allrouteName();	 		
 					 
-        return view('roles.create')->with('privileges',$privileges)->with('permissions',$permissions)->with('rolelist',$list);
+        return view('roles.create',compact('routeName'))->with('privileges',$privileges)->with('permissions',$permissions)->with('rolelist',$list);
     }
 
     /**

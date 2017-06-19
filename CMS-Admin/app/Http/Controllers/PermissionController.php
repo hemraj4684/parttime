@@ -55,8 +55,10 @@ class PermissionController extends Controller
     {
         $permissions = Permission::leftjoin('modules','permissions.module_id','=','modules.module_id')
                                     ->select('permissions.permission_id','permissions.name as permissionName','permissions.routeName','modules.name as moduleName')
-                                    ->paginate(PAGINATENO);
-        return view('permission.permissionView',compact('permissions'));
+                                    ->paginate(10);
+
+           // dd($permissions);
+        return view('permissions.create',compact('permissions'));
     }
 
     public function create()
@@ -76,12 +78,12 @@ class PermissionController extends Controller
 
           $saveYN = $this->permModel->savePermission($req->all());
           if ($saveYN) {
-            Session::flash('message', 'Record Saved Successfully');
-            return redirect()->route('permission.create');
+            Session::flash('alert-success', 'Record Saved Successfully');
+            return redirect()->route('permissions.create');
           } else {
 
-            Session::flash('error', 'Record not Saved Successfully');
-            return redirect()->route('permission.create');
+            Session::flash('alert-danger', 'Record not Saved Successfully');
+            return redirect()->back();
           }
         }
     }
@@ -97,7 +99,11 @@ class PermissionController extends Controller
 
     public function sync()
     {
+        
+
         $i = 0;
+
+
         foreach (Route::getRoutes() as $value) {
             $getName = $value->getName();
             if($getName){
@@ -108,8 +114,7 @@ class PermissionController extends Controller
                 $i++;   
             }
             
-        }
-
+        }                                                                                                                                                                                           
         /** 
           *@var array $routeNamePresent route name which are in database 
           *@var array $routeNameLatest  route name which are in web.php 
@@ -180,5 +185,9 @@ class PermissionController extends Controller
             Session::flash('error','Record not deletd Successfully');
             return redirect()->route('permission.index');    
         }
+    }
+
+    public function show($id){
+
     }
 }

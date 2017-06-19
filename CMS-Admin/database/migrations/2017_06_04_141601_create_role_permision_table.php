@@ -56,8 +56,8 @@ class CreateRolePermisionTable extends Migration
 
         Schema::create('permissions', function (Blueprint $table) {
             $table->increments('permission_id');
-            $table->string('name')->unique()->nullable();
-            $table->string('routeName')->unique();  
+            $table->string('name')->nullable();
+            $table->string('routeName')->unique()->nullable();  
             $table->integer('module_id')->unsigned()->nullable();
             $table->foreign('module_id')->references('module_id')->on('modules');          
             $table->integer('created_by')->unsigned()->nullable();

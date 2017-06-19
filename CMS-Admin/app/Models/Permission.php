@@ -19,8 +19,9 @@ class Permission extends Model
     protected $primaryKey = 'permission_id';
 
     protected $rules = [
-    	'routeName'  => 'required|min:2|max:255',
+    	'routeName'  => 'required|min:2|max:255|unique:permissions,routeName,$id,permission_id',
     ];
+
     private $crudLibrary;
 
     public function __construct()
@@ -42,14 +43,18 @@ class Permission extends Model
                         ->where('org_services.org_id',$org_id)
                         ->where('org_services.status',1)
                         ->get(['services.service_name as serviceName','tabs.name as tabName','modules.name as modName','permissions.permission_id','permissions.name as perName','permissions.routeName'])
+                        ->groupBy('modName')
                         ->toArray();
+                       // dd($routeName)  ;
 
         $groupByModuleRoutes = array();
 
-            foreach ( $routeName as $value ) {
-                $groupByModuleRoutes[$value['modName']][] = $value;
+            foreach ($routeName as $modkey => $modvalue) {
+                foreach ($modvalue as $key => $value) {
+                    $groupByModuleRoutes[$modkey][$value['perName']][] = $value;
+                }
             }
-
+         // dd($routeName,$groupByModuleRoutes)  ;
         
     	return $groupByModuleRoutes;
     }
@@ -58,7 +63,7 @@ class Permission extends Model
     {
     	if($id){
             $this->rules = [
-                'name'  => "required|min:2|max:255|unique:permissions,name,$id,permission_id"
+                'routeName'  => "required|min:2|max:255|unique:permissions,routeName,$id,permission_id"
             ];
         }
         return  $this->crudLibrary->validateOperation($data,$this->rules);

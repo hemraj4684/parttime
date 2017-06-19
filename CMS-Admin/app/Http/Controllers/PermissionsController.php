@@ -33,6 +33,7 @@ class PermissionsController extends Controller
 		try{
 			 $results = array();
 			 $url = env('API_URL')."permissions";
+                   dd($url);
 			 $result = $this->httpGet($url);
 			 //echo '<pre>';		print_r($result);exit;
 			 $results = json_decode($result,false);
@@ -127,19 +128,18 @@ class PermissionsController extends Controller
     public function edit($id)
     {
 
-			 $results = array();
-			 $url = env('API_URL')."permissions";
-			 $result = $this->httpGet($url);
-			 //echo '<pre>';		print_r($result);exit;
-			 $results = json_decode($result,false);
-			 $list = $results->data;
-
-   	  		        $url = env('API_URL')."permissions/edit/$id";
-			 $result = $this->httpGet($url);
-			 $results = json_decode($result,false);
-						$permissions = $results->data[0];
-			return view('permissions.edit')->with('permissions', $permissions)->with('results', $list);
-
+	 $results = array();
+	 $url = env('API_URL')."permissions";
+	 $result = $this->httpGet($url);
+	 //echo '<pre>';		print_r($result);exit;
+	 $results = json_decode($result,false);
+	 $list = $results->data;
+  	 $url = env('API_URL')."permissions/edit/$id";
+	 $result = $this->httpGet($url);
+	 $results = json_decode($result,false);
+     dd($results);
+	 $permissions = $results->data[0];
+	 return view('permissions.edit')->with('permissions', $permissions)->with('results', $list);
     }
 
     /**

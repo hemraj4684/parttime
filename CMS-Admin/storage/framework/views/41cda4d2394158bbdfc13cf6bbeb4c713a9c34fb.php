@@ -1,6 +1,5 @@
-@extends('layouts.app')
- @section('title') Add Permission @stop
-@section('content')
+ <?php $__env->startSection('title'); ?> Add Permission <?php $__env->stopSection(); ?>
+<?php $__env->startSection('content'); ?>
 
 <section class="wrapper main-wrapper row permitions" style=''>
 
@@ -16,8 +15,8 @@
 
              <div class="pull-right hidden-xs">
             <ol class="breadcrumb">
-              <li> <a href="{{ url('/') }}"><i class="fa fa-home"></i>Home</a> </li>
-              <li> <a href="{{ url('/permissions') }}"><i class="fa fa-home"></i>Permissions</a> </li>
+              <li> <a href="<?php echo e(url('/')); ?>"><i class="fa fa-home"></i>Home</a> </li>
+              <li> <a href="<?php echo e(url('/permissions')); ?>"><i class="fa fa-home"></i>Permissions</a> </li>
               <li class="active"> Create </li>
             </ol>
           </div>
@@ -35,12 +34,12 @@
 		<div class="clearfix"></div>	
           <div class="flash-message">
 
-    @foreach (['danger', 'warning', 'success', 'info'] as $msg)
-      @if(Session::has('alert-' . $msg))
+    <?php foreach(['danger', 'warning', 'success', 'info'] as $msg): ?>
+      <?php if(Session::has('alert-' . $msg)): ?>
 
-      <p class="alert alert-{{ $msg }}">{{ Session::get('alert-' . $msg) }} <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a></p>
-      @endif
-    @endforeach
+      <p class="alert alert-<?php echo e($msg); ?>"><?php echo e(Session::get('alert-' . $msg)); ?> <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a></p>
+      <?php endif; ?>
+    <?php endforeach; ?>
   </div> <!-- end .flash-message -->
   <div class="clearfix"></div>
 		<br>        
@@ -80,52 +79,53 @@
                 </div>
                 <div class="panel-body">
                    
-                    <form class="form-horizontal" role="form" method="POST" action="{{ route('permission.store') }}">
+                    <form class="form-horizontal" role="form" method="POST" action="<?php echo e(route('permission.store')); ?>">
                    
-                        {{ csrf_field() }}
+                        <?php echo e(csrf_field()); ?>
 
-                        <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
+
+                        <div class="form-group<?php echo e($errors->has('name') ? ' has-error' : ''); ?>">
                             <label for="name" class="col-md-4 control-label">Permission Name</label>
 
                             <div class="col-md-6">
-                                <input id="name" type="text" class="form-control" name="name" value="{{old('name') }}">
+                                <input id="name" type="text" class="form-control" name="name" value="<?php echo e(old('name')); ?>">
 
-                                @if ($errors->has('name'))
+                                <?php if($errors->has('name')): ?>
                                     <span class="help-block">
-                                        <strong>{{ $errors->first('name') }}</strong>
+                                        <strong><?php echo e($errors->first('name')); ?></strong>
                                     </span>
-                                @endif
+                                <?php endif; ?>
                             </div>
                         </div>
 
-                        <div class="form-group{{ $errors->has('routeName') ? ' has-error' : '' }}">
+                        <div class="form-group<?php echo e($errors->has('routeName') ? ' has-error' : ''); ?>">
                             <label for="routeName" class="col-md-4 control-label">Route Name</label>
 
                             <div class="col-md-6">
-                                <input id="routeName" type="text" class="form-control" name="routeName" value="{{ old('routeName') }}">
+                                <input id="routeName" type="text" class="form-control" name="routeName" value="<?php echo e(old('routeName')); ?>">
 
-                                @if ($errors->has('routeName'))
+                                <?php if($errors->has('routeName')): ?>
                                     <span class="help-block">
-                                        <strong>{{ $errors->first('routeName') }}</strong>
+                                        <strong><?php echo e($errors->first('routeName')); ?></strong>
                                     </span>
-                                @endif
+                                <?php endif; ?>
                             </div>
                         </div>                       
 
-                        <div class="form-group{{ $errors->has('module_id') ? ' has-error' : '' }}">
+                        <div class="form-group<?php echo e($errors->has('module_id') ? ' has-error' : ''); ?>">
                             <label for="module_id" class="col-md-4 control-label">Module</label>
                             <div class="col-md-6">
                               <select name="module_id" class="form-control" required>
                                     <option value="">Select</option>
-                                    @foreach(App\Models\Module::all() as $module)
-                                      <option value="{{$module->module_id}}">{{$module->name}}</option>
-                                    @endforeach
+                                    <?php foreach(App\Models\Module::all() as $module): ?>
+                                      <option value="<?php echo e($module->module_id); ?>"><?php echo e($module->name); ?></option>
+                                    <?php endforeach; ?>
                               </select>
-                                @if ($errors->has('module_id'))
+                                <?php if($errors->has('module_id')): ?>
                                     <span class="help-block">
-                                        <strong>{{ $errors->first('module_id') }}</strong>
+                                        <strong><?php echo e($errors->first('module_id')); ?></strong>
                                     </span>
-                                @endif
+                                <?php endif; ?>
                             </div>
                         </div>
 
@@ -134,7 +134,7 @@
                                 <button type="submit" class="btn btn-primary">
                                     <i class="fa fa-btn fa-save"></i> Save
                                 </button>
-                                <!-- <a href="{{ route('permission.index') }}" class="btn btn-primary">View</a> -->
+                                <!-- <a href="<?php echo e(route('permission.index')); ?>" class="btn btn-primary">View</a> -->
                             </div>
                         </div>
                     </form>
@@ -151,8 +151,8 @@
 			  <br>
             <div class="row">
               <div class="col-xs-12 ">
-               <form method="POST" id="searchform" action="{{ url('/permissions/searchres') }}" role="form"  >	
-             <input type="hidden" name="_token" value="{{ csrf_token() }}">
+               <form method="POST" id="searchform" action="<?php echo e(url('/permissions/searchres')); ?>" role="form"  >	
+             <input type="hidden" name="_token" value="<?php echo e(csrf_token()); ?>">
    
                        <div class="input-group primary"> 
                   <input  class="form-control" placeholder="Search" name="search" type="text" >
@@ -185,27 +185,28 @@
                         <th>Feature</th>
                         <th>Actions</th>
                         </thead>
-                    @if($permissions)
-                      @foreach($permissions as $row)
+                    <?php if($permissions): ?>
+                      <?php foreach($permissions as $row): ?>
                       
-                         <tr id="{{ $row->permission_id }}1">
-                            <td>{{ $row->permissionName }}</td>
-                            <td>{{ $row->routeName }}</td>
-                            <td>{{ $row->moduleName }}</td>
+                         <tr id="<?php echo e($row->permission_id); ?>1">
+                            <td><?php echo e($row->permissionName); ?></td>
+                            <td><?php echo e($row->routeName); ?></td>
+                            <td><?php echo e($row->moduleName); ?></td>
                            <td>
-                              <a href="{{route('permission.edit',$row->permission_id)}}" rel="tooltip" data-color-class = "primary" data-animate=" animated fadeIn" data-toggle="tooltip" data-original-title="Edit" data-placement="left"><i class="fa fa-pencil icon-xs CmmTab"></i></a>
-                              <a onClick="showdiv({{ $row->permission_id }})" style="cursor:pointer;"><i class="glyphicon glyphicon-eye-open CmmTab"></i></a>
-                              <a href="{{route('permissions.destroy',$row->permission_id)}}" class="delete" rel="tooltip" data-color-class = "primary" data-animate=" animated fadeIn CmmTab" data-toggle="tooltip" data-original-title="Delete" data-placement="left"><i class="fa fa-trash icon-xs CmmTab"></i></a>
+                              <a href="<?php echo e(route('permission.edit',$row->permission_id)); ?>" rel="tooltip" data-color-class = "primary" data-animate=" animated fadeIn" data-toggle="tooltip" data-original-title="Edit" data-placement="left"><i class="fa fa-pencil icon-xs CmmTab"></i></a>
+                              <a onClick="showdiv(<?php echo e($row->permission_id); ?>)" style="cursor:pointer;"><i class="glyphicon glyphicon-eye-open CmmTab"></i></a>
+                              <a href="<?php echo e(route('permissions.destroy',$row->permission_id)); ?>" class="delete" rel="tooltip" data-color-class = "primary" data-animate=" animated fadeIn CmmTab" data-toggle="tooltip" data-original-title="Delete" data-placement="left"><i class="fa fa-trash icon-xs CmmTab"></i></a>
                               
                           </td>
                           
                           </tr>
-                          @endforeach
-                      @endif
+                          <?php endforeach; ?>
+                      <?php endif; ?>
                                                    
                         </tbody>
                       </table>
-                      {!!$permissions->render()!!}
+                      <?php echo $permissions->render(); ?>
+
                     </div>
                   </div>
                 </div>
@@ -223,7 +224,7 @@
 
                         <ul class="pager wizard">
                             <li class="previous"><a href="javascript:;" class="btn btn-primary">Previous</a></li>
-                            <li class="next"><a href="{{ url('/privileges/create') }}"  class="btn btn-primary">Next</a></li>
+                            <li class="next"><a href="<?php echo e(url('/privileges/create')); ?>"  class="btn btn-primary">Next</a></li>
                            </ul>
                     </div>
                 </div>
@@ -232,17 +233,17 @@
         </section>
       </div>
       <div class="col-lg-4" id="rightdiv" style="display:none;">
-     @if($permissions)
- @foreach($permissions as $row)
+     <?php if($permissions): ?>
+ <?php foreach($permissions as $row): ?>
                       
-        <section class="box closeopen" id="{{ $row->permission_id }}" style="display:none;"> <br/>
+        <section class="box closeopen" id="<?php echo e($row->permission_id); ?>" style="display:none;"> <br/>
           <div class="content-body">
             <div class="row">
               <div class="col-lg-12 ">
                 
                 
-                   <div><strong>Name:</strong>{{ $row->permission_action }}</div>
-    <div><strong>Description:</strong>{{ $row->permission_desc }}</div>
+                   <div><strong>Name:</strong><?php echo e($row->permission_action); ?></div>
+    <div><strong>Description:</strong><?php echo e($row->permission_desc); ?></div>
               </div>
              
             </div>
@@ -256,14 +257,14 @@
               <div class="col-xs-12"> 
                 
                 <!-- start -->
-                <p><strong>{{ $row->permission_action }} Timeline </strong></p>
+                <p><strong><?php echo e($row->permission_action); ?> Timeline </strong></p>
                 <div class="timeline2-centered">
                 <article class="timeline2-entry">
                     <div class="timeline2-entry-inner">
                       <div class="timeline2-icon bg-info"> <i class="fa fa-dashboard"></i> </div>
                       <div class="timeline2-label">
-                        <h2><a href="#"><strong>{{ $row->permission_action }} </strong></a> <span>Updated by</span><p></p>
-                        <p><span class="text-muted small pull-right"> <i class="fa fa-clock-o"></i> {{ $row->updateduser }}</span></p>
+                        <h2><a href="#"><strong><?php echo e($row->permission_action); ?> </strong></a> <span>Updated by</span><p></p>
+                        <p><span class="text-muted small pull-right"> <i class="fa fa-clock-o"></i> <?php echo e($row->updateduser); ?></span></p>
 						<div class="clearfix"></div>
 						<p></p>
                       </div>
@@ -273,8 +274,8 @@
                     <div class="timeline2-entry-inner">
                       <div class="timeline2-icon bg-success"> <i class="fa fa-tint"></i> </div>
                       <div class="timeline2-label">
-                        <h2><a href="#"><strong>{{ $row->permission_action }} </strong></a> <span>Updated at</span></h2>
-						<p><span class="text-muted small pull-right"><i class="fa fa-clock-o"></i> {{ $row->updated_at }}</span></p>
+                        <h2><a href="#"><strong><?php echo e($row->permission_action); ?> </strong></a> <span>Updated at</span></h2>
+						<p><span class="text-muted small pull-right"><i class="fa fa-clock-o"></i> <?php echo e($row->updated_at); ?></span></p>
 						<div class="clearfix"></div>
 						<p></p>
                       </div>
@@ -284,8 +285,8 @@
                     <div class="timeline2-entry-inner">
                       <div class="timeline2-icon bg-secondary"> <i class="fa fa-suitcase"></i> </div>
                       <div class="timeline2-label">
-                         <h2><a href="#"><strong>{{ $row->permission_action }}  </strong></a> <span>Created by</span></h2>
-						<p><span class="text-muted small pull-right"> <i class="fa fa-clock-o"></i>{{ $row->createduser }}</span></p>
+                         <h2><a href="#"><strong><?php echo e($row->permission_action); ?>  </strong></a> <span>Created by</span></h2>
+						<p><span class="text-muted small pull-right"> <i class="fa fa-clock-o"></i><?php echo e($row->createduser); ?></span></p>
 						<div class="clearfix"></div>
 						<p></p>
                       </div>
@@ -295,8 +296,8 @@
                     <div class="timeline2-entry-inner">
                       <div class="timeline2-icon bg-info"> <i class="fa fa-dashboard"></i> </div>
                       <div class="timeline2-label">
-                        <h2><a href="#"><strong>{{ $row->permission_action }} </strong></a> <span>Create at</span><p></p>
-                        <p><span class="text-muted small pull-right"> <i class="fa fa-clock-o"></i> {{ $row->created_at }}</span></p>
+                        <h2><a href="#"><strong><?php echo e($row->permission_action); ?> </strong></a> <span>Create at</span><p></p>
+                        <p><span class="text-muted small pull-right"> <i class="fa fa-clock-o"></i> <?php echo e($row->created_at); ?></span></p>
 						<div class="clearfix"></div>
 						<p></p>
                       </div>
@@ -306,7 +307,7 @@
                     <div class="timeline2-entry-inner">
                       <div class="timeline2-icon bg-warning"> <i class="fa fa-camera"></i> </div>
                       <div class="timeline2-label">
-                        <h2><a href="#"><strong>{{ $row->permission_action }} </strong></a> <span>changed his</span> <a href="#">Profile Picture</a></h2>
+                        <h2><a href="#"><strong><?php echo e($row->permission_action); ?> </strong></a> <span>changed his</span> <a href="#">Profile Picture</a></h2>
 						<p><span class="text-muted small pull-right"> <i class="fa fa-clock-o"></i> 4:10 pm - 12.06.2016</span></p>
 						<div class="clearfix"></div>
 						<br/>
@@ -336,8 +337,8 @@
 		  </div>
         </section>
       
-	   @endforeach
-                      @endif
+	   <?php endforeach; ?>
+                      <?php endif; ?>
 	  </div>
       
       
@@ -354,4 +355,6 @@ $("#searchform").submit();
 }
 </script>
 
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.app', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
