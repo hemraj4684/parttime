@@ -30,6 +30,12 @@ class Permission extends Model
          //$permission = new Permission();
     }
 
+    public function getPermissionIdByRouteName($routeName){
+        $permissionId = $this->where('routeName',$routeName)->get(['permission_id'])->toArray();
+       // dd($permissionId);
+        return $permissionId[0]['permission_id'];
+    }
+
     public function allrouteName(){
     	$routeNameData = $routeName = [];
 
@@ -42,6 +48,7 @@ class Permission extends Model
                         ->join('org_services','org_services.service_id', '=', 'services.service_id')
                         ->where('org_services.org_id',$org_id)
                         ->where('org_services.status',1)
+                        ->whereNull('permissions.deleted_at')
                         ->get(['services.service_name as serviceName','tabs.name as tabName','modules.name as modName','permissions.permission_id','permissions.name as perName','permissions.routeName'])
                         ->groupBy('modName')
                         ->toArray();

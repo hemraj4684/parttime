@@ -53,12 +53,16 @@ class PermissionController extends Controller
 
     public function index()
     {
+        
         $permissions = Permission::leftjoin('modules','permissions.module_id','=','modules.module_id')
                                     ->select('permissions.permission_id','permissions.name as permissionName','permissions.routeName','modules.name as moduleName')
-                                    ->paginate(10);
-
-           // dd($permissions);
-        return view('permissions.create',compact('permissions'));
+                                    ->whereNull('permissions.deleted_at')
+                                    ->orderBy('moduleName','desc')
+                                    //->get();
+                                    //->toSql();
+                                    ->paginate(PAGINATENO);
+            //dd($permissions,PAGINATENO);
+        return view('permission.permissionView',compact('permissions'));
     }
 
     public function create()

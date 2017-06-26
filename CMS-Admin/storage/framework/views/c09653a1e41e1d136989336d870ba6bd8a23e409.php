@@ -1,4 +1,4 @@
- <?php $__env->startSection('title'); ?> Org Bills <?php $__env->stopSection(); ?>
+ <?php $__env->startSection('title'); ?> ORG Services <?php $__env->stopSection(); ?>
 <?php $__env->startSection('content'); ?>
 <section class="wrapper main-wrapper row">
       <div class="col-xs-12">
@@ -6,13 +6,14 @@
           <div class="pull-left"> 
             <!-- PAGE HEADING TAG - START -->
             <h1 class="title"> </h1>
-           
             <!-- PAGE HEADING TAG - END --> </div>
           <div class="pull-right hidden-xs">
             <ol class="breadcrumb">
               <li> <a href="<?php echo e(url('/')); ?>"><i class="fa fa-home"></i>Home</a> </li>
-              <li> <a href="<?php echo e(url('/orgbills')); ?>">Org Bills</a> </li>
-              </ol>
+              <li> <a href="<?php echo e(url('/orgprofusers')); ?>">Professional Service Users</a> </li>
+              
+			  
+            </ol>
           </div>
         </div>
       </div>
@@ -20,25 +21,15 @@
       <div class="col-lg-12" id="leftdiv">
         <section class="box clients-list">
           <header class="panel_header">
-            <h2 class="title pull-left"> <i class="fa fa-user"></i> &nbsp; Org Bills	</h2>
+            <h2 class="title pull-left"> <i class="fa fa-user"></i> &nbsp; Professional Service Users	</h2>
 			
                 	
-                    <a href="<?php echo e(url('/orgbills/create')); ?>" title="Add Org bills" class="btn btn-primary btn-sm pull-right title addUser">Add Org Bill</a>
+                    <a href="<?php echo e(url('/orgprofusers/create')); ?>" title="Add User" class="btn btn-primary btn-sm pull-right title addUser">Add Professional Service User</a>
                 
           </header>
           <div class="content-body">
             <div class="row">
               <div class="col-xs-12 ">
-              
-                <div class="flash-message">
-    <?php foreach(['danger', 'warning', 'success', 'info'] as $msg): ?>
-      <?php if(Session::has('alert-' . $msg)): ?>
-
-      <p class="alert alert-<?php echo e($msg); ?>"><?php echo e(Session::get('alert-' . $msg)); ?> <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a></p>
-      <?php endif; ?>
-    <?php endforeach; ?>
-  </div> <!-- end .flash-message -->
-  <div class="clearfix"></div>
                 <div class="input-group primary"> <span class="input-group-addon"> <span class="arrow"></span> <i class="fa fa-search"></i> </span>
                   <input  class="form-control search-page-input inputAdvSearch" placeholder="Search" value="Search Users" type="submit"  onmousedown="toggle('menu', event);" onclick="toggle('menu', event);">
 				  
@@ -54,13 +45,34 @@
                 <form action ="#" method="post">
                   <div class="col-xs-12">
                   <div class="form-group">
-                    <label class="form-label" >Org Service Name</label>
+                    <label class="form-label" >First Nanme</label>
                     <span class="desc"></span>
                     <div class="controls">
                       <input type="text" name="firstname" value="" class="form-control" >
                     </div>
                   </div>
-                 
+                  <div class="form-group">
+                    <label class="form-label" >Last Nanme</label>
+                    <span class="desc"></span>
+                    <div class="controls">
+                      <input type="text" name="lastname" value="" class="form-control" >
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" >Role</label>
+                    <span class="desc"></span>
+                    <div class="controls">
+                      <input type="text" name="role" value="" class="form-control" >
+                    </div>
+                  </div>
+				   <div class="form-group">
+                    <label class="form-label" >Organization</label>
+                    <span class="desc"></span>
+                    <div class="controls">
+                      <input type="text" name="org" value="" class="form-control" >
+                    </div>
+                  </div>
+				 
                 </div>
 			  <div class="clearfix"></div>
 			  <hr>
@@ -87,33 +99,28 @@
                     <div class="tab-pane">
                       <table class="table  table-hover table-striped">
                         <tbody>
-                         <thead>
-                        <th>Org Name</th>
-                        <th>Bill Type</th>
-                        <th>Status</th>
-                        <th>Actions</th>
-                        </thead>
-                         <?php if($orgbills): ?>
-                      <?php foreach($orgbills as $row): ?>
+                        
+                         <?php if($users): ?>
+                      <?php foreach($users as $user): ?>
                       
-                         <tr id="<?php echo e($row->org_bill_id); ?>1">
-                          <td><?php echo e($row->org_name); ?></td>
-                          <td><?php echo e($row->bill_type); ?></td>
-                         <td><?php if($row->status == 1) echo 'Active'; else echo 'Inactive'; ?></td>
-                         
+                        <tr>
+                        <td class="client-avatar"><img alt="" src="<?php echo e(URL::asset('public/theme/data/profile/profile.jpg')); ?>" class="img-responsive img-circle" width="22px"> <i class="fa fa-circle online"> </i></td>
+                          <td style="text-transform:capitalize;"><b><?php echo e($user->firstname); ?> <?php echo e($user->lastname); ?></b></td>
+                          <td><?php echo e($user->org_name); ?></td>
+                  
+                          <td><i class="fa fa-envelope"> </i><?php echo e($user->email); ?></td>
+                                                  
                           
-                          <td><a  href="<?php echo e(route('orgbills.edit',$row->org_bill_id)); ?>"  style="margin-right: 3px;"><i class="fa fa-pencil icon-xs CmmTab"></i></a>
+                          <td>
+                          <a href="<?php echo e(route('users.edit',$user->id)); ?>" rel="tooltip" data-color-class = "primary" data-animate=" animated fadeIn" data-toggle="tooltip" data-original-title="Edit" data-placement="left"><i class="fa fa-pencil icon-xs CmmTab"></i></a>
+                          <a onClick="showdiv(<?php echo e($user->id); ?>)" style="cursor:pointer;">show</a>
+                          <a href="<?php echo e(route('users.destroy',$user->id)); ?>" rel="tooltip" data-color-class = "primary" data-animate=" animated fadeIn CmmTab" data-toggle="tooltip" data-original-title="Delete" data-placement="left"><i class="fa fa-trash icon-xs CmmTab"></i></a>
                           
-                          <a onClick="showdiv(<?php echo e($row->org_bill_id); ?>)" style="cursor:pointer;"><i class="glyphicon glyphicon-eye-open CmmTab"></i></a>
-          
-                          <a href="<?php echo e(route('orgbills.destroy',$row->org_bill_id)); ?>" class="delete"  style="margin-right: 3px;"><i class="fa fa-trash icon-xs CmmTab"></i></a></td>
+                          </td>
+                          
                           </tr>
                           <?php endforeach; ?>
-                      <?php else: ?>
-                     <tr><td colspan="5" style="text-align:center">No Records Found</td> </tr>
                       <?php endif; ?>
-                        
-                     
                                                    
                         </tbody>
                       </table>
@@ -126,21 +133,25 @@
         </section>
       </div>
       <div class="col-lg-4" id="rightdiv" style="display:none;">
-            <?php if($orgbills): ?>
-                      <?php foreach($orgbills as $row): ?>
-                                  
-                          
-        <section class="box closeopen" id="<?php echo e($row->org_bill_id); ?>" style="display:none;"> <br/>
+        <?php if($users): ?>
+                      <?php foreach($users as $user): ?>
+                      
+        <section class="box closeopen" id="<?php echo e($user->id); ?>" style="display:none;"> <br/>
           <div class="content-body">
             <div class="row">
-              <div class="col-lg-12 ">                
+              <div class="col-lg-4 text-center">
                 
-                   <div><strong>Org Name:</strong><?php echo e($row->org_name); ?></div>
-   				 <div><strong>Bill Type:</strong><?php echo e($row->bill_type); ?></div>
-            <div><strong>Bill Status:</strong><?php if($row->status == 1): ?>Active <?php else: ?> InActive <?php endif; ?></div>
-  
+                <div class="m-b-sm"> <img alt="image" class="img-circle" src="<?php echo e(URL::asset('public/theme/data/profile/profile.jpg')); ?>" style="width: 62px"> </div>
+				<div><strong> <?php echo e($user->firstname); ?> <?php echo e($user->lastname); ?> </strong></div>
+				<div><?php echo e($user->gender); ?> </div>
               </div>
-             
+              <div class="col-lg-8"> 
+			  
+			  <div><i class="fa fa-suitcase"></i> Professional Service User,Aadhya CMS</div>
+			  <div><i class='fa fa-home'></i> <?php echo e($user->address_line1); ?>,<?php echo e($user->address_line2); ?></div>
+              <div><i class='fa fa-envelope'></i> <?php echo e($user->email); ?></div>
+			  <div><i class='fa fa-phone'></i>&nbsp<span><?php echo e($user->phone_number); ?>,</span></div>
+              </div>
             </div>
             <hr>
 			
@@ -152,25 +163,14 @@
               <div class="col-xs-12"> 
                 
                 <!-- start -->
-                <p><strong><?php echo e($row->org_name); ?> Timeline </strong></p>
+                <p><strong><?php echo e($user->username); ?> Timeline </strong></p>
                 <div class="timeline2-centered">
-                <article class="timeline2-entry">
-                    <div class="timeline2-entry-inner">
-                      <div class="timeline2-icon bg-info"> <i class="fa fa-dashboard"></i> </div>
-                      <div class="timeline2-label">
-                        <h2><a href="#"><strong><?php echo e($row->bill_type); ?> </strong></a> <span>Updated by</span><p></p>
-                        <p><span class="text-muted small pull-right"> <i class="fa fa-clock-o"></i> <?php echo e($row->updateduser); ?></span></p>
-						<div class="clearfix"></div>
-						<p></p>
-                      </div>
-                    </div>
-                  </article>
                   <article class="timeline2-entry">
                     <div class="timeline2-entry-inner">
                       <div class="timeline2-icon bg-success"> <i class="fa fa-tint"></i> </div>
                       <div class="timeline2-label">
-                        <h2><a href="#"><strong><?php echo e($row->bill_type); ?> </strong></a> <span>Updated at</span></h2>
-						<p><span class="text-muted small pull-right"><i class="fa fa-clock-o"></i> <?php echo e($row->updated_at); ?></span></p>
+                        <h2><a href="#"><strong><?php echo e($user->username); ?> </strong></a> <span>Updated address</span></h2>
+						<p><span class="text-muted small pull-right"><i class="fa fa-clock-o"></i> <?php echo e($user->updated_at); ?></span></p>
 						<div class="clearfix"></div>
 						<p></p>
                       </div>
@@ -180,8 +180,8 @@
                     <div class="timeline2-entry-inner">
                       <div class="timeline2-icon bg-secondary"> <i class="fa fa-suitcase"></i> </div>
                       <div class="timeline2-label">
-                         <h2><a href="#"><strong><?php echo e($row->bill_type); ?>  </strong></a> <span>Created at</span></h2>
-						<p><span class="text-muted small pull-right"> <i class="fa fa-clock-o"></i><?php echo e($row->created_at); ?></span></p>
+                         <h2><a href="#"><strong><?php echo e($user->username); ?>  </strong></a> <span>Updated at</span></h2>
+						<p><span class="text-muted small pull-right"> <i class="fa fa-clock-o"></i><?php echo e($user->updated_at); ?></span></p>
 						<div class="clearfix"></div>
 						<p></p>
                       </div>
@@ -191,8 +191,8 @@
                     <div class="timeline2-entry-inner">
                       <div class="timeline2-icon bg-info"> <i class="fa fa-dashboard"></i> </div>
                       <div class="timeline2-label">
-                        <h2><a href="#"><strong><?php echo e($row->bill_type); ?> </strong></a> <span>Create by</span><p></p>
-                        <p><span class="text-muted small pull-right"> <i class="fa fa-clock-o"></i> <?php echo e($row->createduser); ?></span></p>
+                        <h2><a href="#"><strong><?php echo e($user->username); ?> </strong></a> <span>Last logged in</span><p></p>
+                        <p><span class="text-muted small pull-right"> <i class="fa fa-clock-o"></i> 4:10 pm - 12.06.2016</span></p>
 						<div class="clearfix"></div>
 						<p></p>
                       </div>
@@ -219,7 +219,6 @@
 		  
 		  </div>
         </section>
-    
       
 	   <?php endforeach; ?>
                       <?php endif; ?>
@@ -229,11 +228,19 @@
       
       <!-- MAIN CONTENT AREA ENDS --> 
     </section>
-   
+    <script>
+    function showdiv(x)
+	{
+		$(".closeopen").hide();
+		$('.col-lg-12').addClass('col-lg-8').removeClass('col-lg-12')
+		$("#rightdiv").show();
+		$("#"+x).show();
+	}
+    </script>
+
+
 
 
 <?php $__env->stopSection(); ?>
-
-
 
 <?php echo $__env->make('layouts.app', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

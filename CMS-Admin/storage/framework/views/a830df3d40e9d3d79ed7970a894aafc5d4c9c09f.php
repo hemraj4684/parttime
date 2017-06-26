@@ -1,5 +1,6 @@
- <?php $__env->startSection('title'); ?> Edit Org Bills <?php $__env->stopSection(); ?>
+ <?php $__env->startSection('title'); ?> Edit User  <?php $__env->stopSection(); ?>
 <?php $__env->startSection('content'); ?>
+
 <section class="wrapper main-wrapper row" style=''>
 
     <div class='col-xs-12'>
@@ -13,13 +14,11 @@
                 </div>
 
              <div class="pull-right hidden-xs">
-             
              <ol class="breadcrumb">
               <li> <a href="<?php echo e(url('/')); ?>"><i class="fa fa-home"></i>Home</a> </li>
-              <li> <a href="<?php echo e(url('/orgbills')); ?>">Org Bills</a> </li>
-              <li class="active"> Edit Org Bill </li>
+              <li> <a href="<?php echo e(url('/orgsupport')); ?>">Professional Service Users</a> </li>
+              <li class="active"> Add Professional Service User </li>
               </ol>
-             
              </div>
                                 
         </div>
@@ -29,7 +28,7 @@
     <div class="col-xs-12">
     <section class="box ">
             <header class="panel_header">
-                <h2 class="title pull-left"><?php echo e(trans('org_bills.edit')); ?></h2>
+                <h2 class="title pull-left">Edit Org Support User</h2>
                 <div class="actions panel_actions pull-right">
                 	<a class="box_toggle fa fa-chevron-down"></a>
                     <a class="box_setting fa fa-cog" data-toggle="modal" href="#section-settings"></a>
@@ -38,38 +37,43 @@
             </header>
             <div class="content-body">
     <div class="row">
-				<?php echo e(Form::model($orgbills, ['role' => 'form','class'=>'form-horizontal', 'route' => ['orgbills.update', $orgbills->org_bill_id], 'method' => 'PUT'])); ?>		
+    
+
+				<?php echo e(Form::model($users, ['role' => 'form','class'=>'form-horizontal', 'route' => ['orgsupport.update', $users->org_sup_id], 'method' => 'PUT'])); ?>		
+                
+            
   <input type="hidden" name="created_by" value="<?php echo Auth::user()->id; ?>">
   <input type="hidden" name="updated_by" value="<?php echo Auth::user()->id; ?>">	
-  <input type="hidden" name="Userparent" value="<?php echo Auth::user()->parent_id; ?>">	
-       	     <div class="col-xs-12 col-sm-6 col-md-6">
-     <div class="form-group">
-                    <label class="form-label" ><?php echo e(trans('org_bills.heading1')); ?></label>
-                    <span class="desc"></span>
-                    <div class="controls">
-                    <?php echo Form::select('org_id',  ['' => 'Select Organization'] + $orgs, null, ['class' => 'form-control col-md-7 col-xs-12']); ?>
-
-                       <?php if($errors->has('org_id')): ?>
-                                    <span class="help-block" style="color:red;">
-                                        <strong>Select Organization</strong>
-                                    </span>
-                                <?php endif; ?>
-                    </div>
-                  </div>
-                  
+  <input type="hidden" name="Userparent" value="<?php echo Auth::user()->parent_id; ?>">	     	
  <div class="form-group">
-                    <label class="form-label" ><?php echo e(trans('org_bills.heading2')); ?></label>
-                    <span class="desc"></span>
-                    <div class="controls">
-                 <?php echo Form::select('bill_type_id',  ['' => 'Select Bill Type'] + $bill_type, null, ['class' => 'form-control col-md-7 col-xs-12']); ?>
+                        <label class="form-label col-sm-12" for="org-name"><?php echo e(trans('org_service.heading1')); ?><span class="required">*</span>
+                        </label>
+                        <div class="controls col-sm-12">
+    
+<?php echo Form::select('org_id',  ['' => 'Select Organization'] + $orgtype, null, ['class' => 'form-control col-md-7 col-xs-12']); ?>
 
-                  <?php if($errors->has('bill_type_id')): ?>
+ <?php if($errors->has('org_id')): ?>
                                     <span class="help-block" style="color:red;">
-                                        <strong>Select Billing type</strong>
+                                        <strong>Organization selection is required</strong>
                                     </span>
                                 <?php endif; ?>
-                    </div>
-                  </div>  
+
+                        </div>
+                      </div>
+<div class="form-group">
+                        <label class="form-label col-sm-12" for="User-name"><?php echo e(trans('org_service.heading2')); ?><span class="required">*</span>
+                        </label>
+                        <div class="controls col-sm-12">
+    
+<?php echo Form::select('user_id',  ['' => 'Select Professional Service'] + $roles, null, ['class' => 'form-control col-md-7 col-xs-12']); ?>
+
+<?php if($errors->has('user_id')): ?>
+                                    <span class="help-block" style="color:red;">
+                                        <strong>Professional service user selection is required</strong>
+                                    </span>
+                                <?php endif; ?>
+                        </div>
+                      </div>
 
 
                     
@@ -82,8 +86,7 @@
                           <button type="submit" class="btn btn-success">Update</button>
                         </div>
                       </div>
-                      </div>
-  <?php echo e(Form::close()); ?>
+   <?php echo e(Form::close()); ?>
 
                     
     </div>

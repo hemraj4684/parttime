@@ -29,13 +29,20 @@ class RolePermission extends Model
                                 ->where('org_services.status',1)
                                 ->where('roles_permissions.role_id',$roleId)
                                 ->where('roles_permissions.org_id',$orgId)
-                                ->get(['permissions.name as perName','permissions.routeName'])
+                                ->get(['modules.name as modName','permissions.name as perName','permissions.routeName'])
+                                ->groupBy('modName')
                                 ->toArray();
 
-       
-      $permissionName = array_column($permissionName,'routeName');
-      //  dd($permissionName);
-      return $permissionName;
+       $groupByModuleRoutes = array();
+
+            foreach ($permissionName as $modkey => $modvalue) {
+                foreach ($modvalue as $key => $value) {
+                    $groupByModuleRoutes[$modkey][$value['perName']][] = $value;
+                }
+            }
+     // $permissionName = array_column($permissionName,'routeName');
+        //dd($groupByModuleRoutes);
+      return $groupByModuleRoutes;
     }
 
 }

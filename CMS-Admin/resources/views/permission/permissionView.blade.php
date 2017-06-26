@@ -8,7 +8,7 @@
             <div class="panel panel-default">
                 <div class="panel-heading">
                         All Permissions
-                         <a href="{{ route('permission.sync') }}" class="btn btn-primary pull-right" style="margin-left: 1%">Sync</a>    
+                         <!-- <a href="{{ route('permission.sync') }}" class="btn btn-primary pull-right" style="margin-left: 1%">Sync</a>  -->   
                          <a href="{{ route('permission.create') }}" class="btn btn-primary pull-right">New</a>    
                      <div class="clearfix"></div>
                 </div>
@@ -35,6 +35,7 @@
                            </tr>
                          </thead>
                          <tbody>
+                         @if(isset($permissions))
                          <?php $i = (($permissions->currentPage()-1)*PAGINATENO)+1; ?>
                          @foreach($permissions as $perm)
                            <tr>
@@ -53,7 +54,8 @@
                          </tbody>
                       </table>
                    </div>
-                    {!! \App\Models\Permission::paginate(20)->render() !!}   
+                    {!! $permissions->render() !!} 
+                    @endif  
                 </div>
             </div>
         </div>

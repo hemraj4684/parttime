@@ -24,8 +24,20 @@
 <i class="fa fa-check-square"></i> <span class="title">Roles</span>
 </a>  </li>
 <?php } if($curent_role == 1) {?>
-<li> <a href="{{ url('/permissions/create') }}"> 
+<li> <a href="{{ url('/roles/create') }}"> 
 <i class="fa fa-check-square"></i> <span class="title">Roles</span>
+</a>  </li>
+<li> <a href="{{ route('tab.index') }}"> 
+<i class="fa fa-check-square"></i> <span class="title">Tabs</span>
+</a>  </li>
+<li> <a href="{{ route('module.index') }}"> 
+<i class="fa fa-check-square"></i> <span class="title">Modules</span>
+</a>  </li>
+<li> <a href="{{ url('/permission') }}"> 
+<i class="fa fa-check-square"></i> <span class="title">Permissions</span>
+</a>  </li>
+<li> <a href="{{ route('role.permission.view') }}"> 
+<i class="fa fa-check-square"></i> <span class="title">Permissions to roles</span>
 </a>  </li>
 <?php } ?> 
 <?php if($curent_role == 2 || $curent_role == 1) {?>

@@ -27,15 +27,24 @@ class CheckRolePermission
     public function handle($request, Closure $next)
     {
         $curRoute = $request->route()->getName();
-        $roleId = Auth::user()->role_id;//Session::get('roleId');
-        $org_id = Auth::user()->org_id;
-        $permissionName = $this->permModel->allPermissionNamePerRole($roleId,$org_id);
-        //dd($curRoute,$permissionName);
-        if(in_array($curRoute, $permissionName)){
-            return $next($request);
+        $permissionId = $this->perm->getPermissionIdByRouteName($curRoute);
+        if($permissionId){
+            $roleId = Auth::user()->role_id;//Session::get('roleId');
+            $org_id = Auth::user()->org_id;
+            $permissionIdPerRole = $this->permModel->allPermissionPerRole($roleId,$org_id);
+            //dd($permissionId,$permissionIdPerRole);
+            if(in_array($permissionId, $permissionIdPerRole)){
+              //  dd($curRoute);
+                return $next($request);
+            }
+            else {
+                return redirect('/notauthorized');
+            }    
         }
-        else {
-            return redirect('/userNotFound');
+        else 
+        {
+            return redirect('/notauthorized');
         }
+        
     }
 }

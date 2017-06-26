@@ -18,7 +18,9 @@ class ModuleController extends Controller
     public function index()
     {
         $modules = Module::join('tabs','tabs.tab_id','=','modules.tab_id')
-                ->select('modules.module_id','modules.name as moduleName','modules.description','tabs.name as tabName')->paginate(PAGINATENO);
+                ->select('modules.module_id','modules.name as moduleName','modules.description','tabs.name as tabName')
+                ->orderBy('moduleName')
+                ->paginate(PAGINATENO);
         return view('modules.moduleList',compact('modules'));
     }
 

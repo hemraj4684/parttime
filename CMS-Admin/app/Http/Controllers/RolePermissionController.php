@@ -32,7 +32,7 @@ class RolePermissionController extends Controller
 
         $routeName = $this->perm->allrouteName();
         $permissionPerRole = $this->permModel->allPermissionNamePerRole($id,$this->org_id);
-        //dd($permissionPerRole,$routeName);
+       // dd($permissionPerRole,$routeName);
         return view('permission.rolePermissionAjax', compact('routeName','permissionPerRole'));   
     }
 
@@ -41,11 +41,9 @@ class RolePermissionController extends Controller
         $temp = array();
         foreach ($req->permission_id as $key => $value) {
             $tempArray=explode(',', $value);
-            print_r($tempArray);
             $temp = array_merge($tempArray,$temp);
-            
         }
-        dd($temp);
+        $req->permission_id = $temp;
         $dataIns = $dataDel = false;
     	$permissionPerRole = $permissionPerRoleInsert = $permissionPerRoleDelete = array();
 

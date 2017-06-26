@@ -199,7 +199,7 @@ class QuestionController extends Controller
 			 $q1->updated_by = $request->input('updated_by');
             $res = $q1->save();
 			
-			  $q2 = UserQuestions::find($oldq2);		
+			$q2 = UserQuestions::find($oldq2);		
 			$q2->user_id = $user;
             $q2->question_id = $request->input('question_id2');
 			$q2->user_answer = $request->input('user_answer2');
