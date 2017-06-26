@@ -110,6 +110,7 @@ Route::group(['middlewareGroups' => ['web']], function () {
     Route::post('permissions/searchres', [ 'as'=>'permissions.searchres','uses' => 'PermissionsController@searchres']);
     Route::post('permissions/searchress', [ 'as'=>'permissions.searchress','uses' => 'PermissionsController@searchress']);
     Route::resource('permission', 'PermissionController');
+    //Route::get('permission/{search?}', [ 'as'=>'permission.search','uses' => 'PermissionController@index']);
     // permission related routes ended here
 
 

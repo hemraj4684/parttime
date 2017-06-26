@@ -12,6 +12,30 @@
                      <div class="clearfix"></div>
                 </div>
                 <div class="panel-body">
+                  <div class="row">
+  <div class="col-lg-6">
+    <!-- <div class="input-group">
+      <span class="input-group-btn">
+        <button class="btn btn-default" type="button">Go!</button>
+      </span>
+      <input type="text" class="form-control" placeholder="Search for...">
+    </div> --><!-- /input-group -->
+  </div><!-- /.col-lg-6 -->
+  <form action="" method="get">
+  <div class="col-lg-6">
+    <div class="input-group primary">
+     
+      <input type="text" class="form-control" placeholder="Search for..." name="search" value="<?php echo e($search); ?>">
+      <span class="input-group-btn">
+        <button class="btn btn-default" type="submit">Search!</button>
+      </span>
+    </div><!-- /input-group -->
+  </div><!-- /.col-lg-6 -->
+  </form>
+</div><!-- /.row -->
+
+
+
                     <?php if(session()->has('success')): ?>
                     <div class="alert alert-success" role="alert">
                         <?php echo e(session()->get('success')); ?>

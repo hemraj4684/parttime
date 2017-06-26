@@ -30,6 +30,15 @@ class Permission extends Model
          //$permission = new Permission();
     }
 
+    public function viewPermission()
+    {
+        $permissions = Permission::leftjoin('modules','permissions.module_id','=','modules.module_id')
+                                    ->select('permissions.permission_id','permissions.name as permissionName','permissions.routeName','modules.name as moduleName')
+                                    ->whereNull('permissions.deleted_at')
+                                    ->orderBy('moduleName','desc');
+        return $permissions;                                    
+    }
+
     public function getPermissionIdByRouteName($routeName){
         $permissionId = $this->where('routeName',$routeName)->get(['permission_id'])->toArray();
        // dd($permissionId);
@@ -49,6 +58,7 @@ class Permission extends Model
                         ->where('org_services.org_id',$org_id)
                         ->where('org_services.status',1)
                         ->whereNull('permissions.deleted_at')
+                        ->orderBy('modName')
                         ->get(['services.service_name as serviceName','tabs.name as tabName','modules.name as modName','permissions.permission_id','permissions.name as perName','permissions.routeName'])
                         ->groupBy('modName')
                         ->toArray();
@@ -97,4 +107,16 @@ class Permission extends Model
     	return $obj->save();
     }
 
+    public function searchRecord($search) 
+    {
+        $searchVal = $search;
+        $permissions = $this->viewPermission();
+        $permissions = $permissions->where(function ($query) use($searchVal) {
+                                    $query->where('permissions.name','like', "%$searchVal%")
+                                        ->orWhere('routeName','like', "%$searchVal%")
+                                        ->orWhere('modules.name','like', "%$searchVal%");
+                            });
+                                  // dd($permissions->toSql());
+        return $permissions;
+    }
 }

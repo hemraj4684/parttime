@@ -85,4 +85,12 @@ class RolePermissionController extends Controller
     	return redirect()->route('role.permission.view');
     	
     }
+
+
+     public function search(Request $req)
+     {
+        dd($req->search);
+
+     }
+
 }

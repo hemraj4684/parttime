@@ -14,6 +14,7 @@ class PermissionController extends Controller
 {
     public $per = array();
     private $permModel;
+   
 
     public function __construct()
     {
@@ -51,18 +52,20 @@ class PermissionController extends Controller
         return view('permission.permissionView');
     }
 
-    public function index()
+    public function index(Request $req)
     {
+        $search = $req->search;
+        if($search)
+            $permissions = $this->permModel->searchRecord($req->search);
+        else
+            $permissions = $this->permModel->viewPermission();
         
-        $permissions = Permission::leftjoin('modules','permissions.module_id','=','modules.module_id')
-                                    ->select('permissions.permission_id','permissions.name as permissionName','permissions.routeName','modules.name as moduleName')
-                                    ->whereNull('permissions.deleted_at')
-                                    ->orderBy('moduleName','desc')
-                                    //->get();
-                                    //->toSql();
-                                    ->paginate(PAGINATENO);
+        $permissions = $permissions ->paginate(PAGINATENO);
+
+        if($req->search)
+            $permissions->appends(['search' => $req->search]);
             //dd($permissions,PAGINATENO);
-        return view('permission.permissionView',compact('permissions'));
+        return view('permission.permissionView',compact('permissions','search'));
     }
 
     public function create()
@@ -194,4 +197,5 @@ class PermissionController extends Controller
     public function show($id){
 
     }
+
 }

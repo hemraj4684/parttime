@@ -28,12 +28,19 @@
                             <label for="role_id" class="col-md-2 control-label">Role Name</label>
 
                             <div class="col-md-6">
-                                <select id="role_id" type="text" class="form-control" name="role_id">
-                                    <option value="">Please select</option> 
-                                @foreach (App\Models\Role::all() as $role)
-                                    <option value="{{ $role->role_id}}">{{ $role->role_name}}</option>
-                                @endforeach
-                                </select>    
+                                <div class="row">
+                                    <div class="col-md-6">
+                                    <select id="role_id" type="text" class="form-control" name="role_id">
+                                        <option value="">Please select</option> 
+                                    @foreach (App\Models\Role::all() as $role)
+                                        <option value="{{ $role->role_id}}">{{ $role->role_name}}</option>
+                                    @endforeach
+                                    </select>    
+                                    </div>
+                                    <div class="col-md-6">
+                                    <span class="label label-danger">Note: First Select role for assign new permission or view old permissions </span>
+                                    </div>
+                                </div>
                                 @if ($errors->has('role_id'))
                                     <span class="help-block">
                                         <strong>{{ $errors->first('role_id') }}</strong>
@@ -42,7 +49,6 @@
                                 <div class="checkbox">
                                       <label><input type="checkbox" id="adminCheckAll">Select All</label>
                                     </div>
-
                             </div>
                         </div>
 
