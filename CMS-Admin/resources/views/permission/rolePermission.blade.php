@@ -38,7 +38,7 @@
                                     </select>    
                                     </div>
                                     <div class="col-md-6">
-                                    <span class="label label-danger">Note: First Select role for assign new permission or view old permissions </span>
+                                    <span class="label label-info">Note: First Select role for assign new permission or view old permissions </span>
                                     </div>
                                 </div>
                                 @if ($errors->has('role_id'))
@@ -98,7 +98,7 @@ $(document).on('change','#role_id',function(index,value){
   var roleId = $(this).val();
  
   var url = "{{url('role/permission/')}}";
- alert(url); 
+ //alert(url); 
     $.ajax({
         method: 'get',
         url: url+"/"+roleId,
