@@ -55,7 +55,7 @@ Route::get('register/verify/{confirmationCode}', [
 ]);
 
 
-Route::group(['middlewareGroups' => ['web','checkrole']], function () {
+Route::group(['middleware' => ['web','checkrole']], function () {
 
     Route::auth();
     Route::get('/logout', ['as' => 'logout', 'uses' => 'Auth\AuthController@getLogout']);
